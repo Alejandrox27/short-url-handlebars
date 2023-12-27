@@ -1,7 +1,9 @@
-const express = require("express")
+const express = require("express");
 const { create } = require("express-handlebars");
+require("dotenv").config()
+require("./database/db");
 
-const app = express()
+const app = express();
 
 const hbs = create({
     extname: ".hbs",
@@ -14,12 +16,12 @@ app.set("views", "./views");
 
 //Routers
 
-app.use("/", require("./routes/home"))
-app.use("/auth", require("./routes/auth"))
+app.use("/", require("./routes/home"));
+app.use("/auth", require("./routes/auth"));
 
 //Show interface from /public with express static
 
 app.use(express.static(__dirname + "/public"));
 
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log("server on " + PORT));
