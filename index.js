@@ -21,4 +21,5 @@ app.use("/auth", require("./routes/auth"))
 
 app.use(express.static(__dirname + "/public"));
 
-app.listen(5000, () => console.log("server on"));
+const PORT = process.env.PORT || 5000
+app.listen(PORT, () => console.log("server on " + PORT));
