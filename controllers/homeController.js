@@ -12,10 +12,7 @@ const readUrl = async (req, res) => {
 
 const addUrl = async (req, res) => {
     try{
-        const url = new Url({origin: "estatic"});
-        console.log(url);
-        // Here happens the error
-            
+        const url = new Url({origin: req.body.origin});
         await url.save();
         res.redirect("/");
     } catch (error){
