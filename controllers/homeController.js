@@ -35,10 +35,34 @@ const deleteUrl = async( req, res ) => {
         console.log(error);
         res.send("An error has ocurred")
     }
+};
+
+const editUrlForm = async(req, res) => {
+    const { id } = req.params;
+    try{
+        const url = await Url.findById(id).lean();
+        res.render("home", {url})
+    }catch(error){
+        console.log(error);
+        res.send("something failed");
+    }
+};
+
+const editUrl = async(req, res) => {
+    const { id } = req.params;
+    try{
+        const url = await Url.findById(id).lean();
+        res.render("home", {url})
+    }catch(error){
+        console.log(error);
+        res.send("something failed");
+    }
 }
 
 module.exports = {
     readUrl,
     addUrl,
     deleteUrl,
+    editUrlForm,
+    editUrl,
 };
