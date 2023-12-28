@@ -12,16 +12,19 @@ const readUrl = async (req, res) => {
 
 const addUrl = async (req, res) => {
     try{
-        const url = new Url({origin: "estatic"})
+        const url = new Url({origin: "estatic"});
         console.log(url);
-        res.send(url);
+        // Here happens the error
+            
+        await url.save();
+        res.redirect("/");
     } catch (error){
         console.log(error);
-        res.send("An error has ocurred")
+        res.send("An error has ocurred");
     }
 };
 
 module.exports = {
     readUrl,
     addUrl,
-}
+};
