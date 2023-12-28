@@ -1,18 +1,24 @@
 const Url = require("../models/Url")
+const { nanoid } = require("nanoid")
 
 const readUrl = async (req, res) => {
-    const urls = [
-        {origin: "www.google.com", shortURL: "fjadsk1"},
-        {origin: "www.google.com", shortURL: "fjadsk2"},
-        {origin: "www.google.com", shortURL: "fjadsk3"},
-        {origin: "www.google.com", shortURL: "fjadsk4"},
-    ]
+
+    let urls = {}
+    
+    try{
+        urls = await Url.find().lean(); //lean (javascript Object)
+        console.log(await Url.find().lean());
+    }catch(error){
+        console.log(error);
+        res.send("an error has ocurred")
+    }
+
     res.render("home", {urls: urls});
 }
 
 const addUrl = async (req, res) => {
     try{
-        const url = new Url({origin: req.body.origin});
+        const url = new Url({ origin: req.body.origin, shortURL: nanoid(8) });
         await url.save();
         res.redirect("/");
     } catch (error){
