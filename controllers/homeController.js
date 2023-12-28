@@ -67,7 +67,7 @@ const redirect = async(req, res) => {
         const urlDB = await Url.findOne({shortURL: shortUrl});
         res.redirect(urlDB.origin);
     }catch(error){
-
+        res.send("shomething went wrong");
     }
 }
 
