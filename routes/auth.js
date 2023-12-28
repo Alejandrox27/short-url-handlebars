@@ -4,7 +4,7 @@ router = express.Router();
 
 router.get("/register", registerForm);
 router.post("/register", registerUser);
-router.get("/confirmAccount/:token", confirmAccount);
+router.get("/confirm/:token", confirmAccount);
 router.get("/login", loginForm);
 
 module.exports = router;

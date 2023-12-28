@@ -15,6 +15,9 @@ const registerUser = async (req, res) => {
         user = new User({userName, email, password, tokenConfirm: nanoid()});
         
         await user.save();
+
+        // send email with confirmation
+
         res.redirect("/auth/login");
 
     }catch(error){
@@ -26,7 +29,19 @@ const registerUser = async (req, res) => {
 const confirmAccount = async (req, res) => {
     const {token} = req.params;
 
-    res.json(token);
+    try {
+        const user = await User.findOne({tokenConfirm: token});
+        if(!user) throw new Error("The user doesn't exists")
+
+        user.confirmAccount = true;
+        user.tokenConfirm = null;
+
+        await user.save();
+    } catch(error) {
+        res.json({error: error.message});
+    }
+
+    res.redirect("/auth/login");
 }
 
 const loginForm = (req, res) => {
