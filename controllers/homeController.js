@@ -7,7 +7,6 @@ const readUrl = async (req, res) => {
     
     try{
         urls = await Url.find().lean(); //lean (javascript Object)
-        console.log(await Url.find().lean());
     }catch(error){
         console.log(error);
         res.send("an error has ocurred")
@@ -27,7 +26,19 @@ const addUrl = async (req, res) => {
     }
 };
 
+const deleteUrl = async( req, res ) => {
+    const { id } = req.params;
+    try{
+        await Url.findByIdAndDelete(id);
+        res.redirect("/");
+    }catch(error) {
+        console.log(error);
+        res.send("An error has ocurred")
+    }
+}
+
 module.exports = {
     readUrl,
     addUrl,
+    deleteUrl,
 };
