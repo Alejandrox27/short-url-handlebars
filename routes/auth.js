@@ -1,8 +1,8 @@
 const express = require("express");
+const { loginForm, registerForm } = require("../controllers/authController");
 router = express.Router()
 
-router.get("/login", (req, res) => {
-    res.render("login");
-});
+router.get("/register", registerForm)
+router.get("/login", loginForm)
 
 module.exports = router;
