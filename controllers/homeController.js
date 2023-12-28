@@ -50,12 +50,24 @@ const editUrlForm = async(req, res) => {
 
 const editUrl = async(req, res) => {
     const { id } = req.params;
+    const { origin } = req.body;
     try{
-        const url = await Url.findById(id).lean();
-        res.render("home", {url})
+        await Url.findByIdAndUpdate(id, {origin: origin});
+        res.redirect("/");
+
     }catch(error){
         console.log(error);
         res.send("something failed");
+    }
+};
+
+const redirect = async(req, res) => {
+    const { shortUrl } = req.params;
+    try {
+        const urlDB = await Url.findOne({shortURL: shortUrl});
+        res.redirect(urlDB.origin);
+    }catch(error){
+
     }
 }
 
@@ -65,4 +77,5 @@ module.exports = {
     deleteUrl,
     editUrlForm,
     editUrl,
+    redirect,
 };
