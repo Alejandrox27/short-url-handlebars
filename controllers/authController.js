@@ -12,16 +12,21 @@ const registerUser = async (req, res) => {
         let user = await User.findOne({email: email});
         if(user) throw new Error("the user already exists")
 
-        console.log(userName, email, password)
         user = new User({userName, email, password, tokenConfirm: nanoid()});
         
         await user.save();
-        res.json(user);
+        res.redirect("/auth/login");
 
     }catch(error){
-        res.json({error: "an error has ocurred during the creation", errormsg: error})
+        res.json({error: "an error has ocurred during the creation"})
         console.log(error);
     }
+};
+
+const confirmAccount = async (req, res) => {
+    const {token} = req.params;
+
+    res.json(token);
 }
 
 const loginForm = (req, res) => {
@@ -32,4 +37,5 @@ module.exports = {
     loginForm,
     registerForm,
     registerUser,
+    confirmAccount,
 }

@@ -61,13 +61,13 @@ const editUrl = async(req, res) => {
     }
 };
 
-const redirect = async(req, res) => {
+const redirectTo = async(req, res) => {
     const { shortUrl } = req.params;
     try {
         const urlDB = await Url.findOne({shortURL: shortUrl});
         res.redirect(urlDB.origin);
     }catch(error){
-        res.send("shomething went wrong");
+        res.send("something went wrong");
     }
 }
 
@@ -77,5 +77,5 @@ module.exports = {
     deleteUrl,
     editUrlForm,
     editUrl,
-    redirect,
+    redirectTo,
 };
