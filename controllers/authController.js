@@ -22,7 +22,6 @@ const registerUser = async (req, res) => {
 
     }catch(error){
         res.json({error: "an error has ocurred during the creation"})
-        console.log(error);
     }
 };
 
@@ -48,9 +47,26 @@ const loginForm = (req, res) => {
     res.render("login")
 }
 
+const loginUser = async (req, res) => {
+    const {email, password} = req.body;
+    try{
+        const user = await User.findOne({email});
+        if(!user) throw new Error("that email doesn't exists");
+
+        if(!user.confirmAccount) throw new Error("the account is not confirmed");
+
+        if(!await user.comparePassword(password)) throw new Error("password non valid");
+
+        res.redirect("/");
+    }catch(error){
+        res.send(error.message);
+    }
+}
+
 module.exports = {
     loginForm,
     registerForm,
     registerUser,
     confirmAccount,
+    loginUser,
 }
