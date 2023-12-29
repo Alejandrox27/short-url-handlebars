@@ -1,9 +1,29 @@
 const express = require("express");
+const session = require("express-session");
+const flash = require("connect-flash");
 const { create } = require("express-handlebars");
 require("dotenv").config()
 require("./database/db");
 
 const app = express();
+
+app.use(session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: true,
+    name: "secret-name",
+}))
+
+app.use(flash());
+
+app.get("/message-flash", (req, res) => {
+    res.json(req.flash("message"));
+});
+
+app.get("/create-message", (req, res) => {
+    req.flash("message", "this is an error message")
+    res.redirect("/message-flash")
+})
 
 const hbs = create({
     extname: ".hbs",
