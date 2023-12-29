@@ -1,5 +1,6 @@
 {{#if url}}
     <form action="/edit/{{url._id}}" method="post">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
     <input value="{{url.origin}}" type="text" placeholder="Add Url" name="origin", class="form-control my-2">
     <button type="submit" class="btn btn-warning w-100 mb-2">Edit Url</button>
     </form>
@@ -7,6 +8,7 @@
     {{else}}
 
     <form action="/" method="post">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
     <input type="text" placeholder="Add Url" name="origin", class="form-control my-2">
     <button type="submit" class="btn btn-primary w-100 mb-2">Add Url</button>
     </form>

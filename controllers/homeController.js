@@ -2,17 +2,14 @@ const Url = require("../models/Url")
 const { nanoid } = require("nanoid")
 
 const readUrl = async (req, res) => {
-
-    let urls = {}
-    
+    console.log(req.user);
     try{
         urls = await Url.find().lean(); //lean (javascript Object)
+        res.render("home", {urls: urls});
     }catch(error){
         console.log(error);
         res.send("an error has ocurred")
     }
-
-    res.render("home", {urls: urls});
 }
 
 const addUrl = async (req, res) => {
