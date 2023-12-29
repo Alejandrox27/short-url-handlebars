@@ -23,7 +23,7 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.serializeUser((user, done) => done(null, {id: user._id, userName: user.userName}));
+passport.serializeUser((user, done) => done(null, {id: user._id, userName: user.userName})); //req user
 passport.deserializeUser(async (user, done) => {
     const userDB = await User.findById(user.id)
     return done(null, {id: userDB._id, userName: userDB.userName});
