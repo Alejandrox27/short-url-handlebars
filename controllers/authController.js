@@ -86,10 +86,20 @@ const loginUser = async (req, res) => {
     }
 }
 
+const logOutSession = (req, res) => {
+    req.logout(function(err){
+        if(err){
+            return res.json({error: err})
+        }
+    });
+    return res.redirect("/auth/login");
+}
+
 module.exports = {
     loginForm,
     registerForm,
     registerUser,
     confirmAccount,
     loginUser,
+    logOutSession,
 }

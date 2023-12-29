@@ -1,7 +1,7 @@
 const express = require("express");
 const { body } = require("express-validator");
 
-const { loginForm, registerForm, registerUser, confirmAccount, loginUser } = require("../controllers/authController");
+const { loginForm, registerForm, registerUser, confirmAccount, loginUser, logOutSession } = require("../controllers/authController");
 router = express.Router();
 
 router.get("/register", registerForm);
@@ -23,5 +23,7 @@ router.post("/login", [
     body("email", "insert a valid email").trim().isEmail().normalizeEmail(),
     body("password", "Min lenght password (6)").trim().isLength({min: 6}).escape()
 ], loginUser)
+
+router.get("/logout", logOutSession);
 
 module.exports = router;
