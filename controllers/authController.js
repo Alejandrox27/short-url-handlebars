@@ -3,19 +3,19 @@ const { validationResult } = require("express-validator");
 const { nanoid } = require("nanoid")
 
 const registerForm = (req, res) => {
-    res.render("register")
+    res.render("register", {messages: req.flash("messages")})
 }
 
 const registerUser = async (req, res) => {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()){
-        return res.json(errors)
+        req.flash("messages", errors.array())
+        return res.redirect("/auth/register")
     }
 
     const {userName, email, password} = req.body;
     try{
-
         let user = await User.findOne({email: email});
         if(user) throw new Error("the user already exists")
 
@@ -24,11 +24,12 @@ const registerUser = async (req, res) => {
         await user.save();
 
         // send email with confirmation
-
+        req.flash("messages", [{msg: "See your e-mail and validate the account"}]);
         res.redirect("/auth/login");
 
     }catch(error){
-        res.json({error: "an error has ocurred during the creation"})
+        req.flash("messages", [{msg: error.message}]);
+        return res.redirect("/auth/register");
     }
 };
 
@@ -43,6 +44,8 @@ const confirmAccount = async (req, res) => {
         user.tokenConfirm = null;
 
         await user.save();
+
+        req.flash("messages", [{msg: "Verified account, now you can enter"}]);
     } catch(error) {
         res.json({error: error.message});
     }
@@ -70,7 +73,13 @@ const loginUser = async (req, res) => {
 
         if(!await user.comparePassword(password)) throw new Error("password non valid");
 
-        res.redirect("/");
+
+        //create the user login with passport, sends this info to serializeUser
+        req.login(user, function(err) {
+            if (err) throw new Error("error with session")
+            res.redirect("/");
+        })
+
     }catch(error){
         req.flash("messages", [{msg: error.message}])
         return res.redirect("/auth/login")
