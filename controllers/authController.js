@@ -4,7 +4,11 @@ const { nanoid } = require("nanoid")
 
 const registerForm = (req, res) => {
     res.render("register", {messages: req.flash("messages")})
-}
+};
+
+const loginForm = (req, res) => {
+    res.render("login", {messages: req.flash("messages")})
+};
 
 const registerUser = async (req, res) => {
 
@@ -12,7 +16,7 @@ const registerUser = async (req, res) => {
     if (!errors.isEmpty()){
         req.flash("messages", errors.array())
         return res.redirect("/auth/register")
-    }
+    };
 
     const {userName, email, password} = req.body;
     try{
@@ -51,11 +55,7 @@ const confirmAccount = async (req, res) => {
     }
 
     res.redirect("/auth/login");
-}
-
-const loginForm = (req, res) => {
-    res.render("login", {messages: req.flash("messages")})
-}
+};
 
 const loginUser = async (req, res) => {
     const errors = validationResult(req);
@@ -84,7 +84,7 @@ const loginUser = async (req, res) => {
         req.flash("messages", [{msg: error.message}])
         return res.redirect("/auth/login")
     }
-}
+};
 
 const logOutSession = (req, res) => {
     req.logout(function(err){

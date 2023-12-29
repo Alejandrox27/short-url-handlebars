@@ -43,6 +43,13 @@ app.use(express.urlencoded({extended: true}));
 
 app.use(csrf())
 
+app.use((req, res, next) => {
+    //this will render the token to all the views
+            //name of the input {{}}
+    res.locals.csrfToken = req.csrfToken();
+    next()
+})
+
 //Routers
 
 app.use("/", require("./routes/home"));
