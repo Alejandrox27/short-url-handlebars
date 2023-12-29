@@ -51,10 +51,16 @@ const confirmAccount = async (req, res) => {
 }
 
 const loginForm = (req, res) => {
-    res.render("login")
+    res.render("login", {messages: req.flash("messages")})
 }
 
 const loginUser = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()){
+        req.flash("messages", errors.array())
+        return res.redirect("/auth/login")
+    }
+
     const {email, password} = req.body;
     try{
         const user = await User.findOne({email});

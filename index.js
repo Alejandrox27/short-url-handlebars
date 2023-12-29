@@ -16,15 +16,6 @@ app.use(session({
 
 app.use(flash());
 
-app.get("/message-flash", (req, res) => {
-    res.json(req.flash("message"));
-});
-
-app.get("/create-message", (req, res) => {
-    req.flash("message", "this is an error message")
-    res.redirect("/message-flash")
-})
-
 const hbs = create({
     extname: ".hbs",
     partialsDir: ["views/components"], //partial dirs (components)
