@@ -11,9 +11,13 @@
 
     <div class="container mt-3">
 
-        {{#each messages}}
-            <div class="alert alert-dark mb-2">Message</div>
-        {{/each}}
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                {{#each messages}}
+                    <div class="alert alert-dark mb-2">{{this.msg}}</div>
+                {{/each}}
+            </div>
+        </div>
 
         {{{body}}}
     </div>

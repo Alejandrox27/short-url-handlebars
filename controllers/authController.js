@@ -72,7 +72,8 @@ const loginUser = async (req, res) => {
 
         res.redirect("/");
     }catch(error){
-        res.send(error.message);
+        req.flash("messages", [{msg: error.message}])
+        return res.redirect("/auth/login")
     }
 }
 
