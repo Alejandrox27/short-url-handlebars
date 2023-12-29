@@ -47,6 +47,7 @@ app.use((req, res, next) => {
     //this will render the token to all the views
             //name of the input {{}}
     res.locals.csrfToken = req.csrfToken();
+    res.locals.messages = req.flash("messages");
     next()
 })
 

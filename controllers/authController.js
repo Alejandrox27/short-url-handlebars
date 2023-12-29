@@ -3,11 +3,11 @@ const { validationResult } = require("express-validator");
 const { nanoid } = require("nanoid")
 
 const registerForm = (req, res) => {
-    res.render("register", {messages: req.flash("messages")})
+    res.render("register")
 };
 
 const loginForm = (req, res) => {
-    res.render("login", {messages: req.flash("messages")})
+    res.render("login")
 };
 
 const registerUser = async (req, res) => {

@@ -5,10 +5,10 @@ const verifyUser = require("../middlewares/verifyUser");
 const router = express.Router()
 
 router.get("/", verifyUser, readUrl);
-router.post("/", urlValidate, addUrl);
-router.get("/delete/:id", deleteUrl);
-router.get("/edit/:id", editUrlForm);
-router.post("/edit/:id", urlValidate, editUrl)
+router.post("/", verifyUser, urlValidate, addUrl);
+router.get("/delete/:id", verifyUser, deleteUrl);
+router.get("/edit/:id", verifyUser, editUrlForm);
+router.post("/edit/:id", verifyUser, urlValidate, editUrl)
 router.get("/:shortUrl", redirectTo)
 
 module.exports = router;

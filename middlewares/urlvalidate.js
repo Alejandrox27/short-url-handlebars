@@ -5,17 +5,11 @@ const urlValidate = (req, res, next) => {
         const { origin } = req.body;
         const urlFrontend = new URL(origin);
         if (urlFrontend.origin !== "null") {
-            if (
-                urlFrontend.protocol === "http:" ||
-                urlFrontend.protocol === "https:"
-            ) {
-                return next();
-            }
-            throw new Error("https:// or http:// expected");
+            return next()
         }
         throw new Error("not valid url 😲");
     } catch (error) {
-        res.send("not valid url")
+        req.flash("messages", [{msg: error.message}]);
         return res.redirect("/");
     }
 }
