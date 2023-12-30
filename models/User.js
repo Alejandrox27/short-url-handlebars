@@ -26,6 +26,10 @@ const userSchema = new Schema({
     confirmAccount: {
         type: Boolean,
         default: false
+    },
+    Image: {
+        type: String,
+        default: null,
     }
 });
 

@@ -1,0 +1,17 @@
+<h1 class="text-center">User Name</h1>
+<p class="text-center">Edit Here your Image profile</p>
+<div class="my-2 text-center my-5">
+    <img class="rounded-circle" src="/img/profiles/profile.jpg" alt="">
+</div>
+
+<div class="container text-center">
+    <div class="row align-items-center justify-content-center">
+
+        <form class="d-flex flex-column col-6 justify-content-center align-items-center" enctype="multipart/form-data" action="/profile?_csrf={{csrfToken}}" method="post">
+            <!--<input type="hidden" name="_csrf" value="{{csrfToken}}" />-->
+            <input class="fomr-control form-control-sm" id="formFile" type="file" name="myFile">
+            <button class="btn btn-dark my-3">Change profile image</button>
+        </form>
+
+    </div>
+</div>
