@@ -1,6 +1,10 @@
 const User = require("../models/User");
 const { validationResult } = require("express-validator");
-const { nanoid } = require("nanoid")
+const { nanoid } = require("nanoid");
+const nodemailer = require("nodemailer");
+require("dotenv").config();
+const fs = require("fs").promises;
+const handlebars = require("handlebars");
 
 const registerForm = (req, res) => {
     res.render("register")
@@ -18,16 +22,38 @@ const registerUser = async (req, res) => {
         return res.redirect("/auth/register")
     };
 
+    const tokenConfirm = nanoid();
     const {userName, email, password} = req.body;
     try{
         let user = await User.findOne({email: email});
         if(user) throw new Error("the user already exists")
 
-        user = new User({userName, email, password, tokenConfirm: nanoid()});
+        user = new User({userName, email, password, tokenConfirm });
         
         await user.save();
 
         // send email with confirmation
+        var transport = nodemailer.createTransport({
+            host: "sandbox.smtp.mailtrap.io",
+            port: 2525,
+            auth: {
+              user: process.env.userEmail,
+              pass: process.env.passEmail,
+            }
+          });
+
+        const filePath = __dirname + "/../views/email.hbs";
+        const data = await readFileAndProcess(filePath);
+
+        const compiledTemplate = handlebars.compile(data);
+
+        await transport.sendMail({
+            from: '"Fred Foo 👻"', // sender address
+            to: user.email, // list of receivers
+            subject: "Verify your User", // Subject line
+            html: compiledTemplate({ verifyAccount: tokenConfirm }), // html body
+            });
+
         req.flash("messages", [{msg: "See your e-mail and validate the account"}]);
         res.redirect("/auth/login");
 
@@ -36,6 +62,16 @@ const registerUser = async (req, res) => {
         return res.redirect("/auth/register");
     }
 };
+
+async function readFileAndProcess(filePath) {
+    try {
+      const data = await fs.readFile(filePath, 'utf8');
+      return data;
+    } catch (err) {
+      console.error('Error al leer el archivo:', err);
+      throw err;
+    }
+  }
 
 const confirmAccount = async (req, res) => {
     const {token} = req.params;

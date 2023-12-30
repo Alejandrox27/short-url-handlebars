@@ -84,8 +84,8 @@ const redirectTo = async(req, res) => {
         const urlDB = await Url.findOne({shortURL: shortUrl});
         res.redirect(urlDB.origin);
     }catch(error){
-        req.flash("messages", [{ msg: error.message }]);
-        return res.redirect("/");
+        req.flash("messages", [{ msg: "This URL does'n exists" }]);
+        return res.redirect("/auth/login");
     }
 }
 
