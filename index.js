@@ -3,7 +3,7 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 const { create } = require("express-handlebars");
-const csrf = require("csurf");
+const helmet = require("helmet");
 
 const User = require("./models/User");
 require("dotenv").config()
@@ -19,6 +19,8 @@ app.use(session({
 }))
 
 app.use(flash());
+
+app.use(helmet());
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -41,12 +43,9 @@ app.set("views", "./views");
 //detect body requests
 app.use(express.urlencoded({extended: true}));
 
-app.use(csrf())
-
 app.use((req, res, next) => {
     //this will render the token to all the views
             //name of the input {{}}
-    res.locals.csrfToken = req.csrfToken();
     res.locals.messages = req.flash("messages");
     next()
 })
