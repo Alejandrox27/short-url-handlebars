@@ -2,7 +2,7 @@ const Url = require("../models/Url")
 const { nanoid } = require("nanoid")
 
 const readUrl = async (req, res) => {
-    console.log(req.user);
+    //console.log(req.user);
     try{
         urls = await Url.find({user: req.user.id}).lean(); //lean (javascript Object)
         res.render("home", {urls: urls});
@@ -29,7 +29,16 @@ const addUrl = async (req, res) => {
 const deleteUrl = async( req, res ) => {
     const { id } = req.params;
     try{
+        //await Url.findByIdAndDelete(id);
+        const url = await Url.findById(id);
+        
+        if(!url.user === req.user.id.toString()){
+            throw new Error("Is not your Url")
+        }
+
         await Url.findByIdAndDelete(id);
+        req.flash("messages", [{msg: "Url Deleted"}])
+
         res.redirect("/");
     }catch(error) {
         req.flash("messages", [{ msg: error.message }]);
@@ -52,7 +61,15 @@ const editUrl = async(req, res) => {
     const { id } = req.params;
     const { origin } = req.body;
     try{
+        const url = await Url.findById(id).lean();
+        const id_user = req.user.id;
+
+        if(!url.user === id_user){
+            throw new Error("Is not your Url")
+        }
+        
         await Url.findByIdAndUpdate(id, {origin: origin});
+
         res.redirect("/");
 
     }catch(error){
