@@ -52,7 +52,7 @@ module.exports.editPhotoProfile = async (req, res) => {
             fs.renameSync(file.filepath, dirfile);
 
             const image = await Jimp.read(dirfile);
-            image.resize(200, 200).quality(90).writeAsync(dirfile);
+            image.cover(200,200).quality(90).writeAsync(dirfile);
 
             const user = await User.findById(req.user.id);
             user.Image = `${req.user.id}.${extension}`;
