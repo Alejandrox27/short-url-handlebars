@@ -1,7 +1,17 @@
 const formidable = require("formidable");
+const Jimp = require("jimp");
 const path = require("path");
+const fs = require("fs");
+const User = require("../models/User");
 
 module.exports.formProfile = async (req, res) => {
+    try{
+        const user = await User.findById(req.user.id);
+        return res.render("profile", {user: req.user, image: user.Image});
+    }catch(error){
+        req.flash("messages", [{msg: "Error during the read image profile"}])
+        return res.redirect("/profile");
+    }
     res.render("profile")
 }
 
@@ -36,15 +46,24 @@ module.exports.editPhotoProfile = async (req, res) => {
                 throw new Error("Less than 50mg")
             }
 
-            const extensions = file.mimetype.split("/")[1];
-            const dirfile = path.join(__dirname, `../public/profiles/${req.user.id}${extensions}`)
+            const extension = file.mimetype.split("/")[1];
+            const dirfile = path.join(__dirname, `../public/img/profiles/${req.user.id}.${extension}`)
+
+            fs.renameSync(file.filepath, dirfile);
+
+            const image = await Jimp.read(dirfile);
+            image.resize(200, 200).quality(90).writeAsync(dirfile);
+
+            const user = await User.findById(req.user.id);
+            user.Image = `${req.user.id}.${extension}`;
+            await user.save();
 
             req.flash("messages", [{msg: "Uploaded image"}]);
-            return res.redirect("/profile");
 
         }catch(error){
             req.flash("messages", [{msg: error.message}]);
-            return res.redirect("/profile")
+        } finally{
+            return res.redirect("/profile");
         }
     })
 }

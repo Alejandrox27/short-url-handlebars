@@ -1,7 +1,11 @@
-<h1 class="text-center">User Name</h1>
+<h1 class="text-center">{{ user.userName }}</h1>
 <p class="text-center">Edit Here your Image profile</p>
 <div class="my-2 text-center my-5">
-    <img class="rounded-circle" src="/img/profiles/profile.jpg" alt="">
+    {{#if image}}
+        <img class="rounded-circle" src="/img/profiles/{{image}}" alt="">
+        {{else}}
+        <img class="rounded-circle" src="/img/profiles/profile.jpg" alt="">
+    {{/if}}
 </div>
 
 <div class="container text-center">
